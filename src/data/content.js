@@ -12,9 +12,9 @@ export const fotos = {
 }
 
 export const contacto = {
-  email: 'ventas@it-support.cl',
-  whatsapp: '56977440908',
-  telefono: '+56 9 7744 0908',
+  email: 'info@it-support.cl',
+  whatsapp: '56934504901',
+  telefono: '+56 9 3450 4901',
   horarioTexto: 'Lunes a viernes, de 8:30 a 18:00',
   // Horario en hora de Chile: días 1-5 = lunes a viernes, minutos desde medianoche
   horario: { dias: [1, 2, 3, 4, 5], abre: 8 * 60 + 30, cierra: 18 * 60 },
