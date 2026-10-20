@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react'
 import { WhatsAppIcon } from './Icon'
 import { waLink } from '../data/content'
 
-export default function WhatsAppFab() {
-  // Mientras se ve el inicio no hace falta: la orden de servicio ya tiene su botón de WhatsApp
+// Se oculta mientras se ve `ocultarEn`: el hero ya invita a consultar y la orden tiene su propio botón
+export default function WhatsAppFab({ ocultarEn = 'inicio' }) {
   const [oculto, setOculto] = useState(true)
 
   useEffect(() => {
-    const inicio = document.getElementById('inicio')
-    if (!inicio) return
+    const seccion = document.getElementById(ocultarEn)
+    if (!seccion) return
     const io = new IntersectionObserver(([e]) => setOculto(e.isIntersecting), { threshold: 0.15 })
-    io.observe(inicio)
+    io.observe(seccion)
     return () => io.disconnect()
-  }, [])
+  }, [ocultarEn])
 
   return (
     <a

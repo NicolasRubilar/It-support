@@ -3,7 +3,7 @@ import Icon from './Icon'
 import SectionHeader from './SectionHeader'
 import Picture from './Picture'
 import useOpenStatus from '../hooks/useOpenStatus'
-import { contacto, fotos, waLink } from '../data/content'
+import { contacto, fotos, gmailLink, waLink } from '../data/content'
 
 export default function About() {
   const abierto = useOpenStatus()
@@ -25,16 +25,29 @@ export default function About() {
 
           <div className="panel about__text">
             <p>
-              En IT - Support entregamos servicios computacionales a tu medida. Somos un equipo
-              técnico que resuelve los problemas tecnológicos de personas y empresas desde{' '}
-              {contacto.desde}: te explicamos qué tiene tu equipo en palabras simples y te damos el
-              presupuesto antes de repararlo.
+              Con más de 10 años de experiencia en el sector tecnológico, 
+              entregamos soluciones informáticas integrales orientadas a optimizar la operaciónes 
+              y productividad de nuestros clientes.
+              {' '} Servicios computacionalesa su medida, con el respaldo, la experiencia y el compromiso que su empresa necesita.
+  
             </p>
             <div className="about__actions">
-              <a className="btn btn--whatsapp" href={waLink()} target="_blank" rel="noreferrer">
-                <WhatsAppIcon size={18} /> WhatsApp<span className="sr-only"> (se abre en una nueva pestaña)</span>
+              <a
+                className="btn btn--whatsapp"
+                href={waLink()}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="WhatsApp: escríbenos para cotizar un servicio (se abre en una nueva pestaña)"
+              >
+                <WhatsAppIcon size={18} /> WhatsApp
               </a>
-              <a className="btn btn--mail" href={`mailto:${contacto.email}`}>
+              <a
+                className="btn btn--mail"
+                href={gmailLink('Consulta desde la página web')}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Correo: escríbenos a ${contacto.email} por Gmail (se abre en una nueva pestaña)`}
+              >
                 <Icon name="mail" size={18} /> Correo
               </a>
             </div>
@@ -44,7 +57,7 @@ export default function About() {
         <Picture
           className="about__photo"
           src={fotos.edificio}
-          alt="Fachada de vidrio de un edificio de oficinas"
+          alt="Edificio corporativo de oficinas con fachada de vidrio, donde brindamos soporte técnico y redes para empresas"
           width="340"
           height="420"
         />

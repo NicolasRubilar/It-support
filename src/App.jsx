@@ -1,5 +1,6 @@
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
+import FirstAid from './components/FirstAid'
 import Services from './components/Services'
 import Process from './components/Process'
 import Products from './components/Products'
@@ -15,6 +16,7 @@ export default function App() {
       <Navbar />
       <main id="contenido" className="page">
         <Hero />
+        <FirstAid />
         <Services />
         <Process />
         <Products />

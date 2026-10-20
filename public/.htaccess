@@ -1,0 +1,62 @@
+# Configuración para cPanel / Apache. Vite la copia tal cual a dist/:
+# subir el contenido de dist/ (incluido este archivo oculto) a public_html.
+
+AddDefaultCharset utf-8
+Options -Indexes
+ServerSignature Off
+ErrorDocument 404 /index.html
+
+AddType font/woff2 .woff2
+AddType image/avif .avif
+AddType image/webp .webp
+AddType image/svg+xml .svg
+
+# ---------- HTTPS y dominio único (https://www.it-support.cl) ----------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Archivos ocultos (.git, .env…) no se sirven; .well-known sí, lo usa AutoSSL para el certificado
+  RewriteRule (^|/)\.(?!well-known/) - [R=404,L]
+
+  # Sin www → con www, directo a HTTPS en un solo salto
+  RewriteCond %{HTTP_HOST} ^it-support\.cl$ [NC]
+  RewriteRule ^ https://www.it-support.cl%{REQUEST_URI} [R=301,L]
+
+  # HTTP → HTTPS (el segundo chequeo evita un bucle si hay un proxy como Cloudflare delante)
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+</IfModule>
+
+# ---------- Cabeceras de seguridad ----------
+# La política de contenido completa (scripts, estilos, imágenes) viaja como <meta> en cada HTML;
+# aquí van las directivas que solo funcionan como cabecera.
+<IfModule mod_headers.c>
+  Header always set Content-Security-Policy "frame-ancestors 'none'; object-src 'none'; base-uri 'self'"
+  Header always set X-Frame-Options "DENY"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  # Solo sobre HTTPS. Sin includeSubDomains: los subdominios de cPanel (mail., webmail.) podrían no tener certificado
+  Header always set Strict-Transport-Security "max-age=31536000" "expr=%{HTTPS} == 'on'"
+  Header always unset X-Powered-By
+  Header unset X-Powered-By
+
+  # Caché: los archivos de /assets llevan un hash en el nombre, así que nunca cambian
+  <FilesMatch "\.(js|css|woff2|avif|webp|jpg|jpeg|png|svg)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+  <If "%{REQUEST_URI} =~ m#^/(assets|fonts)/#">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </If>
+  # El HTML siempre se revalida, para que los cambios se vean al tiro
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+# ---------- Compresión ----------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json application/xml image/svg+xml
+</IfModule>

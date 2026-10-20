@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Icon from './Icon'
 import SectionHeader from './SectionHeader'
+import Siglas from './Siglas'
 import { productos, waLink } from '../data/content'
 
 const categorias = Object.keys(productos)
@@ -63,8 +64,8 @@ export default function Products() {
             <li className="panel product" key={`${activa}-${p.nombre}`}>
               <span className="product__icon"><Icon name={p.icono} size={34} /></span>
               <div>
-                <h3>{p.nombre}</h3>
-                <p>{p.detalle}</p>
+                <h3><Siglas texto={p.nombre} /></h3>
+                <p><Siglas texto={p.detalle} /></p>
                 <a
                   className="product__link"
                   href={waLink(`Hola, quiero consultar por: ${p.nombre}.`)}
